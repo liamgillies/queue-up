@@ -21,9 +21,8 @@ export class UserService {
     return this.http.get<User>('http://localhost:5000/users/getuser/' + String(userId));
   }
 
-
-  createProfile(user): Observable<any>{
-    return this.http.post(`http://localhost:5000/create_profile/`, user);
+  createProfile(user: User): Observable<void>{
+    return this.http.post<void>(`http://localhost:5000/create_profile/`, user);
   }
 
 }
