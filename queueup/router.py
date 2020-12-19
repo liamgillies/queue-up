@@ -1,6 +1,6 @@
 from datetime import datetime
 import requests, json
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from queueup import app, db, oauth, get_google_provider_cfg
 from queueup.models import User
@@ -104,21 +104,30 @@ def logout():
 
 @app.route("/create_profile", methods=['POST'])
 def create_profile():
-
     return
-#
-#
+
+
+@app.route("/users/getmatches", methods=['GET'])
+def get_matches():
+    users = User.query.all()
+    users = [user.serialize() for user in users]
+
+    for user in users:
+        print(user)
+        # logic for getting matches
+
+    return jsonify(users)
+
+#used for profiles on find_duos and used on profile page for current user info
+@app.route("/user/<int:user_id>", methods=['GET'])
+def get_user():
+    return
+
+
 # #get everyone on the list
 # @app.route("/find_duos", methods=['GET'])
 # def get_duos():
 #     return
-#
-#
-# #used for profiles on find_duos and used on profile page for current user info
-# @app.route("/user/<int:post_id>", methods=['GET'])
-# def get_user():
-#     return
-#
 #
 # # when you change profile
 # @app.route("/profile", methods=['POST'])

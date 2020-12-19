@@ -1,16 +1,29 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import {User} from "../_models/User";
+import {Observable} from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getAllUsers()
+  getMatches(): Observable<User[]> {
+    // right now this returns all users
+    return this.http.get<User[]>(`http://localhost:5000/users/getmatches`);
+  }
 
-  getCurrentUser()
+  getUserById(userId): Observable<User> {
+    return this.http.get<User>('http://localhost:5000/users/getuser/' + String(userId));
+  }
 
-  createProfile()
+
+  createProfile(user): Observable<any>{
+    return this.http.post(`http://localhost:5000/create_profile/`, user);
+  }
 
 }

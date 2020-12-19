@@ -14,15 +14,16 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     picture = db.Column(db.String(100), nullable=False, default='default.jpg')
 
-
     # profile info fill in later
     # posts = db.relationship('Post', backref='author', lazy=True)
     # roles, opggLink, matches = , swipedLeft
     # swipedRight
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"User('{self.name}', '{self.email}')"
 
+    def serialize(self):
+        return {'id': self.id, 'name': self.name, 'email': self.email, 'picture': self.picture}
 
 '''
 if initializing the db for the first time run the following code in the python shell: 
