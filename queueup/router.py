@@ -81,9 +81,7 @@ def authorized():
 
 
     # Create a user in db with the information provided by Google
-    user = User(
-        id=id, name=name, email=email, picture=picture
-    )
+    user = User(id=id, name=name, email=email, picture=picture)
 
     # Doesn't exist? Add it to the database.
     #if not User.query.filter_by(id=id).first():
@@ -97,16 +95,17 @@ def authorized():
     # Send user back to homepage
     return redirect(url_for("index"))
 
-
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
-# @app.route("/create_profile", methods=['POST'])
-# def create_profile():
-#     return
+
+@app.route("/create_profile", methods=['POST'])
+def create_profile():
+
+    return
 #
 #
 # #get everyone on the list
