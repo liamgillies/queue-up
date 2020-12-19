@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-create-profile',
   templateUrl: './create-profile.component.html',
@@ -24,10 +24,10 @@ export class CreateProfileComponent implements OnInit {
   profileForm = new FormGroup({
     ign: new FormControl('', [Validators.required]),
     rank: new FormControl('', [Validators.required]),
-    roles: new FormArray([]),
-    description: new FormControl('', [Validators.required]),
+    roles: new FormArray([], [Validators.required]),
+    description: new FormControl('',[Validators.required, Validators.maxLength(100)]),
     opgg: new FormControl('', [Validators.required]),
-    rolesLF: new FormControl('', [Validators.required]),
+    rolesLF: new FormArray([], [Validators.required]),
     lowRankLF: new FormControl('', [Validators.required]),
     highRankLF: new FormControl('', [Validators.required])
   });
@@ -38,6 +38,18 @@ export class CreateProfileComponent implements OnInit {
 
   changeRank(e) {
     this.profileForm.controls.rank.setValue(e.target.value, {
+      onlySelf: true
+    });
+  }
+
+  changeRankLow(e) {
+    this.profileForm.controls.lowRankLF.setValue(e.target.value, {
+      onlySelf: true
+    });
+  }
+
+  changeRankHigh(e) {
+    this.profileForm.controls.highRankLF.setValue(e.target.value, {
       onlySelf: true
     });
   }
@@ -59,7 +71,24 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
+  onCheckboxChangeLF(e) {
+    const checkArray: FormArray = this.profileForm.get('rolesLF') as FormArray;
+  
+    if (e.target.checked) {
+      checkArray.push(new FormControl(e.target.value));
+    } else {
+      let i: number = 0;
+      checkArray.controls.forEach((item: FormControl) => {
+        if (item.value == e.target.value) {
+          checkArray.removeAt(i);
+          return;
+        }
+        i++;
+      });
+    }
+  }
+
   register() {
-    console.log(this.profileForm.controls);
+    console.log(this.profileForm.controls.ign.value);
   }
 }

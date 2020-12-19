@@ -5,16 +5,21 @@ import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CreateProfileComponent } from './create-profile/create-profile.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
-    CreateProfileComponent
+    CreateProfileComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
+  ],
+  exports: [
+
   ],
   providers: [],
   bootstrap: [AppComponent]

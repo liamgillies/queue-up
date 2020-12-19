@@ -1,19 +1,55 @@
 <div class="bg-image">
     <div class="center-ctr">
         <form [formGroup]="profileForm">
-            <input matInput placeholder="username" type="text" formControlName="ign">
+            <label> In game name:
+                <input placeholder="username" type="text" formControlName="ign">
+            </label>
             <br/>
-            <input matInput placeholder="op.gg link" type="text" formControlName="username">
-            <br/>
+            <label> OP.GG link: 
+                <input placeholder="op.gg link" type="text" formControlName="opgg">
+            </label>
+           
+            <br/><br/>
+            <span>Enter your rank:</span><br/>
             <select class="custom-select" (change)="changeRank($event)" formControlName="rank">
                 <option value="" selected="selected" disabled>Choose your rank</option>
                 <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
              </select>
-             <label id="checkbox" class="btn btn-default active" formArrayName="roles" *ngFor="let role of LOL_ROLES; let i = index">
+             
+             <br/><br/>
+             <span>Enter your Role(s):</span><br/>
+             <label id="checkbox" class="btn btn-default" formArrayName="roles" *ngFor="let role of LOL_ROLES; let i = index">
                 <input type="checkbox" [value]="role.value" (change)="onCheckboxChange($event)">
                 {{role.name}}
               </label>
-            <button id="submit" class="btn btn-primary" type="button" (click)="register()">Submit</button>
+
+              <br/><br/>
+              <span>Enter a description (100 characters max):</span><br/>
+              <textarea formControlName="description" placeholder="Enter a description:" rows="4" columns="50" style="width: 400px"></textarea>
+              
+              <br/><br/>
+              <span>Lower bound rank that you want to be matched with:</span><br/>
+              <select class="custom-select" (change)="changeRankLow($event)" formControlName="lowRankLF">
+                <option value="" selected="selected" disabled>Choose a lower bound</option>
+                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+             </select>
+             <br/><br/>
+
+             <span>Upper bound rank that you want to be matched with:</span><br/>
+             <select class="custom-select" (change)="changeRankHigh($event)" formControlName="highRankLF">
+                <option value="" selected="selected" disabled>Choose an upper bound</option>
+                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+             </select>
+             <br/><br/>
+
+             <span>Role(s) that you want to be matched with:</span><br/>
+             <label id="checkbox" class="btn btn-default" formArrayName="rolesLF" *ngFor="let role of LOL_ROLES; let i = index">
+                <input type="checkbox" [value]="role.value" (change)="onCheckboxChangeLF($event)">
+                {{role.name}}
+              </label>
+              <br/><br/>
+              
+              <button id="submit" class="btn btn-primary" type="button" (click)="register()">Submit</button>
         </form>
     </div>
 </div>
