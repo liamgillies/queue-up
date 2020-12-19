@@ -6,9 +6,12 @@ from oauthlib.oauth2 import WebApplicationClient
 from flask_cors import CORS
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import CORS
+from flask_bootstrap import Bootstrap
+
 
 # flask app
 app = Flask(__name__)
+Bootstrap(app)
 CORS(app)
 
 

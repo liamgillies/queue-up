@@ -8,22 +8,43 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(user_id)
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.String(50), primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     picture = db.Column(db.String(100), nullable=False, default='default.jpg')
 
-    # profile info fill in later
-    # posts = db.relationship('Post', backref='author', lazy=True)
-    # roles, opggLink, matches = , swipedLeft
-    # swipedRight
+    opggLink = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.String(100), nullable=True)
+    userRank = db.Column(db.Integer, nullable=True)
+    highRankLF = db.Column(db.Integer, nullable=True)
+    lowRankLF = db.Column(db.Integer, nullable=True)
+
+    profileCreated = db.Column(db.Boolean, nullable=False, default=False)
+
+    #roles = db.relationship('Role', backref='user_id', lazy=True)
+    # swipedDown =
+    # swipedUp =
+    # matches
 
     def __repr__(self):
         return f"User('{self.name}', '{self.email}')"
 
     def serialize(self):
-        return {'id': self.id, 'name': self.name, 'email': self.email, 'picture': self.picture}
+        return {'id': self.id, 'name': self.name, 'email': self.email, 'picture': self.picture,
+                'opggLink': self.opggLink, 'description': self.description, 'userRank': self.userRank,
+                'highRankLF': self.highRankLF, 'lowRankLF': self.lowRankLF}
+
+
+class Roles(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(50), db.ForeignKey('user.id'), nullable=False)
+    role_name = db.Column(db.String(50))
+    roles_wanted = db.Column(db.Boolean, nullable=False)
+
+    def serialize(self):
+        return {'user_id': self.user_id, 'role_name': self.role_name, 'roles_wanted': self.roles_wanted}
 
 '''
 if initializing the db for the first time run the following code in the python shell: 

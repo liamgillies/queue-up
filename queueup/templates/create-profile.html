@@ -1,0 +1,112 @@
+{% block head %}
+  <link href="{{ url_for('static', filename='css/create-profile.css') }}" rel="stylesheet">
+  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"/>-->
+{% endblock %}
+
+
+{% block content %}
+<div class="bg-image">
+    <div class="center-ctr">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+
+                <div class="form-group">
+                    <label> <span class="red">*</span>in game name:
+                        {{ form.ign(class="form-control form-control-lg", placeholder="in game name")}}
+                    </label>
+                </div>
+
+                <br/>
+
+                <div class="form-group">
+                    <label> <span class="red">*</span>op.gg link:
+                        {{ form.opgg(class="form-control form-control-lg", placeholder="op.gg link")}}
+                    </label>
+                </div>
+
+
+                <br/>
+                <br/>
+
+
+                <div class="form-group">
+                    <label> <span class="red">*</span>select your rank:
+                        {{ form.rank(class="custom-select") }}
+                    </label>
+                </div>
+
+                <br/>
+                <br/>
+
+                 <span><span class="red">*</span>Select your Role(s):</span><br/>
+
+                 <div class="form-group">
+                    <label> <span class="red">*</span>select your rank:
+                        {{ form.rank(class="custom-select") }}
+                    </label>
+                 </div>
+
+                 {% for role in roles %}
+                 <label id="checkbox" class="btn btn-default">
+                    <input type="checkbox">
+                    {{role}}
+                 </label>
+                 {% endfor %}
+
+                 <br/>
+                 <br/>
+
+                  <span><span class="red">*</span>Enter a description (100 characters max):</span><br/>
+                  <textarea wrap="hard" maxlength="100"
+                  placeholder="Enter a description:" rows="4" columns="50" style="width: 500px"></textarea>
+                  <br/>
+
+                  <br/>
+                  <br/>
+
+                  <span><span class="red">*</span>Lower bound rank that you want to be matched with:</span><br/>
+                  <select class="custom-select">
+                    <option value="" selected="selected" disabled>Choose a lower bound</option>
+                    {% for rank in ranks%}
+                        <option>{{rank.name}}</option>
+                    {% endfor %}
+                 </select>
+
+                 <!--<div class="error red" style="position: absolute;" *ngIf="submitted && rankDifferenceError">Ranks must not overlap<br/><br/></div>-->
+
+                 <br/>
+                 <br/>
+
+                 <span><span class="red">*</span>Upper bound rank that you want to be matched with:</span><br/>
+                 <select class="custom-select">
+                    <option value="" selected="selected" disabled>Choose an upper bound</option>
+                     {% for rank in ranks %}
+                        <option>{{rank.name}}</option>
+                     {% endfor %}
+                 </select>
+                 <!--<div class="error red" style="position: absolute;" *ngIf="submitted && rankDifferenceError">Ranks must not overlap<br/><br/></div>-->
+
+                <br/>
+                <br/>
+
+                 <span><span class="red">*</span>Role(s) that you want to be matched with:</span><br/>
+                 {% for role in roles %}
+                 <label id="checkbox" class="btn btn-default">
+                    <input type="checkbox">
+                    {{role}}
+                 </label>
+                 {% endfor %}
+
+                  <br/>
+                  <!--<div class="error red" *ngIf="submitted && profileForm.invalid">Please enter all required fields</div>-->
+            </fieldset>
+            <br/>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
