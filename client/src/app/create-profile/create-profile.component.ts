@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../_services/user.service';
 @Component({
   selector: 'app-create-profile',
   templateUrl: './create-profile.component.html',
@@ -8,10 +10,34 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class CreateProfileComponent implements OnInit {
 
-  LOL_RANKS = ['Challenger', 'Grandmasters', 'Master', 'Diamond I', 'Diamond II', 'Diamond III', 'Diamond IV', 
-  'Platinum I', 'Platinum II', 'Platinum III', 'Platinum IV', 'Gold I', 'Gold II', 'Gold III', 'Gold IV', 
-  'Silver I', 'Silver II', 'Silver III', 'Silver IV', 'Bronze I', 'Bronze II', 'Bronze III', 'Bronze IV', 
-  'Iron I', 'Iron II', 'Iron III', 'Iron IV']
+  LOL_RANKS = [
+    {name: 'Challenger', rank: 26},
+    {name: 'Grandmaster', rank: 25},
+    {name: 'Master', rank: 24},
+    {name: 'Diamond I', rank: 23},
+    {name: 'Diamond II', rank: 22},
+    {name: 'Diamond III', rank: 21},
+    {name: 'Diamond IV', rank: 20},
+    {name: 'Platinum I', rank: 19},
+    {name: 'Platinum II', rank: 18},
+    {name: 'Platinum III', rank: 17},
+    {name: 'Platinum IV', rank: 16},
+    {name: 'Gold I', rank: 15},
+    {name: 'Gold II', rank: 14},
+    {name: 'Gold III', rank: 13},
+    {name: 'Gold IV', rank: 12},
+    {name: 'Silver I', rank: 11},
+    {name: 'Silver II', rank: 10},
+    {name: 'Silver III', rank: 9},
+    {name: 'Silver IV', rank: 8},
+    {name: 'Bronze I', rank: 7},
+    {name: 'Bronze II', rank: 6},
+    {name: 'Bronze III', rank: 5},
+    {name: 'Bronze IV', rank: 4},
+    {name: 'Iron I', rank: 3},
+    {name: 'Iron II', rank: 2},
+    {name: 'Iron III', rank: 1},
+    {name: 'Iron IV', rank: 0}]
 
   LOL_ROLES = [
     { name: 'Top', value: 'top' },
@@ -31,7 +57,11 @@ export class CreateProfileComponent implements OnInit {
     lowRankLF: new FormControl('', [Validators.required]),
     highRankLF: new FormControl('', [Validators.required])
   });
-  constructor() {}
+
+  public submitted:boolean = false;
+  public rankDifferenceError:boolean = false;
+  constructor(private userService: UserService,
+    private router: Router) {}
 
   ngOnInit(): void {
   }
@@ -89,6 +119,33 @@ export class CreateProfileComponent implements OnInit {
   }
 
   register() {
-    console.log(this.profileForm.controls.ign.value);
+    const rank = parseInt(this.profileForm.controls.rank.value.substring(3,5))
+    const highRank = parseInt(this.profileForm.controls.highRankLF.value.substring(3,5))
+    const lowRank = parseInt(this.profileForm.controls.lowRankLF.value.substring(3,5))
+    this.submitted = true;
+    if (this.profileForm.invalid) {
+      if(highRank < lowRank) {
+        this.rankDifferenceError = true;
+      }
+      return;
+    }
+    else if(highRank < lowRank) {
+      this.rankDifferenceError = true;
+      return;
+    }
+
+    this.userService.createProfile({
+      ign: this.profileForm.controls.ign.value,
+      rank: rank,
+      roles: this.profileForm.controls.roles.value,
+      description: this.profileForm.controls.description.value,
+      opgg: this.profileForm.controls.opgg.value,
+      rolesLF: this.profileForm.controls.rolesLF.value,
+      lowRankLF: lowRank,
+      highRankLF: highRank
+    }).subscribe(() => {
+      this.router.navigate(['/queue']);
+    });
+    
   }
 }

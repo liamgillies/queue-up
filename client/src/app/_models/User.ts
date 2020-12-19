@@ -1,10 +1,10 @@
 export class User {
     ign: string;
-    rank: string;
-    roles: string;
+    rank: number;
+    roles: string[];
     description: string;
     opgg: string;
-    rolesLF: string;
-    lowRankLF: string;
-    highRankLF: string;
+    rolesLF: string[];
+    lowRankLF: number;
+    highRankLF: number;
 }

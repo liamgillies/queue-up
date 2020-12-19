@@ -1,48 +1,54 @@
 <div class="bg-image">
     <div class="center-ctr">
         <form [formGroup]="profileForm">
-            <label> In game name:
+            <label> <span class="red">*</span>In game name:
                 <input placeholder="username" type="text" formControlName="ign">
             </label>
             <br/>
-            <label> OP.GG link: 
+            <label> <span class="red">*</span>OP.GG link: 
                 <input placeholder="op.gg link" type="text" formControlName="opgg">
             </label>
            
             <br/><br/>
-            <span>Enter your rank:</span><br/>
+            <span><span class="red">*</span>Enter your rank:</span><br/>
             <select class="custom-select" (change)="changeRank($event)" formControlName="rank">
                 <option value="" selected="selected" disabled>Choose your rank</option>
-                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+                <option *ngFor="let r of LOL_RANKS" [ngValue]="r.rank">{{r.name}}</option>
              </select>
              
              <br/><br/>
-             <span>Enter your Role(s):</span><br/>
+             <span><span class="red">*</span>Enter your Role(s):</span><br/>
              <label id="checkbox" class="btn btn-default" formArrayName="roles" *ngFor="let role of LOL_ROLES; let i = index">
                 <input type="checkbox" [value]="role.value" (change)="onCheckboxChange($event)">
                 {{role.name}}
               </label>
 
               <br/><br/>
-              <span>Enter a description (100 characters max):</span><br/>
-              <textarea formControlName="description" placeholder="Enter a description:" rows="4" columns="50" style="width: 400px"></textarea>
-              
+              <span><span class="red">*</span>Enter a description (100 characters max):</span><br/>
+              <textarea wrap="hard" maxlength="100" formControlName="description" 
+              placeholder="Enter a description:" rows="4" columns="50" style="width: 500px"></textarea>
+              <br/>
+              <span *ngIf="!profileForm.controls.description.value" style="position: absolute;">0</span>
+              <span *ngIf="profileForm.controls.description.value" style="position: absolute;">{{profileForm.controls.description.value.length}}</span>
+
               <br/><br/>
-              <span>Lower bound rank that you want to be matched with:</span><br/>
+              <span><span class="red">*</span>Lower bound rank that you want to be matched with:</span><br/>
               <select class="custom-select" (change)="changeRankLow($event)" formControlName="lowRankLF">
                 <option value="" selected="selected" disabled>Choose a lower bound</option>
-                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+                <option *ngFor="let r of LOL_RANKS" [ngValue]="r.rank">{{r.name}}</option>
              </select>
+             <div class="error red" style="position: absolute;" *ngIf="submitted && rankDifferenceError">Ranks must not overlap<br/><br/></div>
              <br/><br/>
 
-             <span>Upper bound rank that you want to be matched with:</span><br/>
+             <span><span class="red">*</span>Upper bound rank that you want to be matched with:</span><br/>
              <select class="custom-select" (change)="changeRankHigh($event)" formControlName="highRankLF">
                 <option value="" selected="selected" disabled>Choose an upper bound</option>
-                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+                <option *ngFor="let r of LOL_RANKS" [ngValue]="r.rank">{{r.name}}</option>
              </select>
+             <div class="error red" style="position: absolute;" *ngIf="submitted && rankDifferenceError">Ranks must not overlap<br/><br/></div>
              <br/><br/>
 
-             <span>Role(s) that you want to be matched with:</span><br/>
+             <span><span class="red">*</span>Role(s) that you want to be matched with:</span><br/>
              <label id="checkbox" class="btn btn-default" formArrayName="rolesLF" *ngFor="let role of LOL_ROLES; let i = index">
                 <input type="checkbox" [value]="role.value" (change)="onCheckboxChangeLF($event)">
                 {{role.name}}
@@ -50,6 +56,7 @@
               <br/><br/>
               
               <button id="submit" class="btn btn-primary" type="button" (click)="register()">Submit</button>
+              <div class="error red" *ngIf="submitted && profileForm.invalid">Please enter all required fields</div>
         </form>
     </div>
 </div>
