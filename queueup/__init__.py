@@ -4,10 +4,11 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
 from flask_login import login_user, current_user, logout_user, login_required
-
+from flask_cors import CORS
 
 # flask app
 app = Flask(__name__)
+CORS(app)
 
 # database info
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
