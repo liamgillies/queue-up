@@ -119,9 +119,12 @@ export class CreateProfileComponent implements OnInit {
   }
 
   register() {
-    const rank = parseInt(this.profileForm.controls.rank.value.substring(3,5))
-    const highRank = parseInt(this.profileForm.controls.highRankLF.value.substring(3,5))
-    const lowRank = parseInt(this.profileForm.controls.lowRankLF.value.substring(3,5))
+    const rlen = this.profileForm.controls.rank.value.length
+    const hlen = this.profileForm.controls.highRankLF.value.length
+    const llen = this.profileForm.controls.lowRankLF.value.length
+    const rank = parseInt(this.profileForm.controls.rank.value.substring(rlen-2,rlen))
+    const highRank = parseInt(this.profileForm.controls.highRankLF.value.substring(hlen-2,hlen))
+    const lowRank = parseInt(this.profileForm.controls.lowRankLF.value.substring(llen-2,llen))
     this.submitted = true;
     if (this.profileForm.invalid) {
       if(highRank < lowRank) {
@@ -144,7 +147,7 @@ export class CreateProfileComponent implements OnInit {
       lowRankLF: lowRank,
       highRankLF: highRank
     }).subscribe(() => {
-      this.router.navigate(['/queue']);
+      //this.router.navigate(['/queue']);
     });
     
   }

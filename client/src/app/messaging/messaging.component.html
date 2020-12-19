@@ -1,0 +1,22 @@
+<div class="bg-image">
+    <div class="row">
+        <span class="column1">
+            <div id="header">Matches</div>
+            <div *ngFor="let match of matches">
+                <div class="match-ctr" (click)="joinRoom(match._id)">
+                    {{match.ign}}
+                </div>
+            </div>
+        </span>
+    
+        <span class="column2">
+            <ul *ngFor="let message of messages">{{message}}</ul>
+        </span>
+    </div>
+    <div class="inputbox">
+        <input type=text id="privateMessage1">
+        <button (click)="sendPrivateMessage()">Send</button>
+    </div>
+    <br/>
+    <button (click)="joinRoom('asdf')">Join Room</button>
+</div>

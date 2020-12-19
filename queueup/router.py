@@ -5,7 +5,6 @@ from flask_login import login_user, current_user, logout_user, login_required
 from queueup import app, db, oauth, get_google_provider_cfg
 from queueup.models import User
 
-
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
@@ -105,7 +104,7 @@ def logout():
 @app.route("/create_profile", methods=['POST'])
 def create_profile():
     data = request.get_json()
-    print(data)
+    app.logger.info(current_user)
     return jsonify(data)
 
 

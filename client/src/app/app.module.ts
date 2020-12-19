@@ -6,34 +6,28 @@ import { LandingComponent } from './landing/landing.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CreateProfileComponent } from './create-profile/create-profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
-<<<<<<< HEAD
-import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QueueComponent } from './queue/queue.component';
+import { MessagingComponent } from './messaging/messaging.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-=======
-import { HttpClientModule } from '@angular/common/http';
->>>>>>> dbed89d440846b29d6e2b161a3aa4835ea8e96f1
-
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
     CreateProfileComponent,
     QueueComponent,
+    MessagingComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-<<<<<<< HEAD
-    MatCardModule,
     HttpClientModule,
-    BrowserAnimationsModule
-=======
-    HttpClientModule
->>>>>>> dbed89d440846b29d6e2b161a3aa4835ea8e96f1
+    BrowserAnimationsModule,
+    SocketIoModule.forRoot(config)
   ],
   exports: [
 
