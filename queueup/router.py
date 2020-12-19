@@ -1,6 +1,5 @@
-from d:atetime import datetime
-import requests
-import json
+from datetime import datetime
+import requests, json
 from flask import request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from queueup import app, db, oauth, get_google_provider_cfg
@@ -38,11 +37,7 @@ def login():
     return redirect(request_uri)
 
 
-<<<<<<< HEAD
-@app.route("/login/authorized", methods=['POST', 'GET'])
-=======
 @app.route("/login/authorized", methods=['GET', 'POST'])
->>>>>>> 15ff9514dff5209f93c945a17c2f83d240a67efa
 def authorized():
     code = request.args.get("code")
     # Find out what URL to hit to get tokens that allow you to ask for
@@ -73,6 +68,7 @@ def authorized():
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = oauth.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
+
 
     # verify their email through Google
     if userinfo_response.json().get("email_verified"):
@@ -120,7 +116,7 @@ def logout():
 #
 #
 # #used for profiles on find_duos and used on profile page for current user info
-# @app.route("/user/<int:_id>", methods=['GET'])
+# @app.route("/user/<int:post_id>", methods=['GET'])
 # def get_user():
 #     return
 #

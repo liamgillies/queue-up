@@ -8,12 +8,12 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(user_id)
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.String(50), primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     picture = db.Column(db.String(100), nullable=False, default='default.jpg')
+
 
     # profile info fill in later
     # posts = db.relationship('Post', backref='author', lazy=True)
@@ -22,8 +22,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
-<<<<<<< HEAD
-=======
 
 
 '''
@@ -33,4 +31,3 @@ from queueup import db
 from queueup.models import User, <other models you want to create a table for>, 
 db.create_all()
 '''
->>>>>>> 15ff9514dff5209f93c945a17c2f83d240a67efa
