@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
 from flask_cors import CORS
 from flask_login import login_user, current_user, logout_user, login_required
-
+from flask_cors import CORS
 
 # flask app
 app = Flask(__name__)

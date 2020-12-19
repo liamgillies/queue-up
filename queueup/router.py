@@ -104,7 +104,9 @@ def logout():
 
 @app.route("/create_profile", methods=['POST'])
 def create_profile():
-    return
+    data = request.get_json()
+    print(data)
+    return jsonify(data)
 
 
 @app.route("/users/getmatches", methods=['GET'])
