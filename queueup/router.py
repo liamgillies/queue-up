@@ -2,7 +2,7 @@ from datetime import datetime
 import requests, json
 from flask import request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
-from queueup import app, db, oauth, config, get_google_provider_cfg
+from queueup import app, db, oauth, get_google_provider_cfg
 from queueup.models import User
 
 
@@ -14,7 +14,7 @@ def index():
             "<div><p>Google Profile Picture:</p>"
             '<img src="{}" alt="Google profile pic"></img></div>'
             '<a class="button" href="/logout">Logout</a>'.format(
-                current_user.name, current_user.email, current_user.profile_pic
+                current_user.name, current_user.email, current_user.picture
             )
         )
     else:
@@ -38,7 +38,7 @@ def login():
     return redirect(request_uri)
 
 
-@app.route("/login/authorized", methods=['POST'])
+@app.route("/login/authorized", methods=['GET', 'POST'])
 def authorized():
     code = request.args.get("code")
     # Find out what URL to hit to get tokens that allow you to ask for
@@ -57,7 +57,7 @@ def authorized():
         token_url,
         headers=headers,
         data=body,
-        auth=(config['GOOGLE_CLIENT_ID'], config['GOOGLE_CLIENT_SECRET']),
+        auth=(app.config['GOOGLE_CLIENT_ID'], app.config['GOOGLE_CLIENT_SECRET']),
     )
 
     # Parse the tokens!
@@ -80,14 +80,17 @@ def authorized():
     else:
         return "User email not available or not verified by Google.", 400
 
+
     # Create a user in db with the information provided by Google
     user = User(
-        id_=id, name=name, email=email, picture=picture
+        id=id, name=name, email=email, picture=picture
     )
 
     # Doesn't exist? Add it to the database.
+    #if not User.query.filter_by(id=id).first():
     if not User.query.get(id):
-        User.create(id, name, email, picture)
+        db.session.add(user)
+        db.session.commit()
 
     # Begin user session by logging the user in
     login_user(user)

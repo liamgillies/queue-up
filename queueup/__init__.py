@@ -8,19 +8,19 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 # flask app
 app = Flask(__name__)
-config = dict()
 
 # database info
-config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
-config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 # google oauth info
-config['GOOGLE_CLIENT_ID'] = os.environ.get("GOOGLE_CLIENT_ID", None)
-config['GOOGLE_CLIENT_SECRET'] = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-config['GOOGLE_DISCOVERY_URL'] = "https://accounts.google.com/.well-known/openid-configuration"
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #change when we go to prod
+app.config['GOOGLE_CLIENT_ID'] = os.environ.get("GOOGLE_CLIENT_ID", None)
+app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+app.config['GOOGLE_DISCOVERY_URL'] = "https://accounts.google.com/.well-known/openid-configuration"
 
 def get_google_provider_cfg():
-    return requests.get(config['GOOGLE_DISCOVERY_URL']).json()
+    return requests.get(app.config['GOOGLE_DISCOVERY_URL']).json()
 
 ###### user session management ######
 login_manager = LoginManager()
@@ -28,7 +28,7 @@ login_manager.init_app(app)
 #######################################
 
 db = SQLAlchemy(app)
-oauth = WebApplicationClient(config['GOOGLE_CLIENT_ID'])
+oauth = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 
 
 from queueup import router
