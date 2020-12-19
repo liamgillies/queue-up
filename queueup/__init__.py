@@ -3,7 +3,6 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
-from queueup.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -26,10 +25,6 @@ def get_google_provider_cfg():
 ###### user session management ######
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 #######################################
 
 db = SQLAlchemy(app)

@@ -2,48 +2,48 @@ from datetime import datetime
 import requests, json
 from flask import request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
-from queueup import app, db, oauth, config
+from queueup import app, db, oauth, config, get_google_provider_cfg
 from queueup.models import User
 
 
 @app.route("/", methods=['GET', 'POST'])
-def landing_page():
-    def index():
-        if current_user.is_authenticated:
-            return (
-                "<p>Hello, {}! You're logged in! Email: {}</p>"
-                "<div><p>Google Profile Picture:</p>"
-                '<img src="{}" alt="Google profile pic"></img></div>'
-                '<a class="button" href="/logout">Logout</a>'.format(
-                    current_user.name, current_user.email, current_user.profile_pic
-                )
+def index():
+    if current_user.is_authenticated:
+        return (
+            "<p>Hello, {}! You're logged in! Email: {}</p>"
+            "<div><p>Google Profile Picture:</p>"
+            '<img src="{}" alt="Google profile pic"></img></div>'
+            '<a class="button" href="/logout">Logout</a>'.format(
+                current_user.name, current_user.email, current_user.profile_pic
             )
-        else:
-            return '<a class="button" href="/login">Google Login</a>'
+        )
+    else:
+        return '<a class="button" href="/login">Google Login</a>'
+
 
 
 @app.route("/login")
 def login():
     # Find out what URL to hit for Google login
-    google_provider_cfg = app.get_google_provider_cfg()
+    google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
     # Use library to construct the request for Google login and provide
     # scopes that let you retrieve user's profile from Google
     request_uri = oauth.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri="/authorized",
+        redirect_uri=request.base_url+"/authorized",
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
 
 
-@app.route("/authorized", methods=['POST'])
+@app.route("/login/authorized", methods=['POST'])
 def authorized():
     code = request.args.get("code")
     # Find out what URL to hit to get tokens that allow you to ask for
     # things on behalf of a user
-    google_provider_cfg = app.get_google_provider_cfg()
+    google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
 
     # Prepare and send a request to get tokens! Yay tokens!
@@ -94,6 +94,7 @@ def authorized():
 
     # Send user back to homepage
     return redirect(url_for("index"))
+
 
 @app.route("/logout")
 @login_required
