@@ -22,7 +22,7 @@ export class UserService {
   }
 
   createProfile(user: User): Observable<void>{
-    return this.http.post<void>(`http://localhost:5000/create_profile/`, user);
+    return this.http.post<void>(`http://localhost:5000/create_profile`, user);
   }
 
 }
