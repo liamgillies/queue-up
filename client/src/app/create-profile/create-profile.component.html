@@ -1,0 +1,19 @@
+<div class="bg-image">
+    <div class="center-ctr">
+        <form [formGroup]="profileForm">
+            <input matInput placeholder="username" type="text" formControlName="ign">
+            <br/>
+            <input matInput placeholder="op.gg link" type="text" formControlName="username">
+            <br/>
+            <select class="custom-select" (change)="changeRank($event)" formControlName="rank">
+                <option value="" selected="selected" disabled>Choose your rank</option>
+                <option *ngFor="let rank of LOL_RANKS" [ngValue]="rank">{{rank}}</option>
+             </select>
+             <label id="checkbox" class="btn btn-default active" formArrayName="roles" *ngFor="let role of LOL_ROLES; let i = index">
+                <input type="checkbox" [value]="role.value" (change)="onCheckboxChange($event)">
+                {{role.name}}
+              </label>
+            <button id="submit" class="btn btn-primary" type="button" (click)="register()">Submit</button>
+        </form>
+    </div>
+</div>
