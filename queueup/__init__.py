@@ -3,13 +3,16 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
+from flask_cors import CORS
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import CORS
-from flask_socketio import SocketIO, send, join_room, emit
+from flask_socketio import SocketIO, send, join_room, emit, leave_room
+from flask_bootstrap import Bootstrap
 
 # flask app
 app = Flask(__name__)
-CORS(app)
+Bootstrap(app)
+CORS(app, intercept_exceptions=False)
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 @socketio.on('join')
@@ -18,11 +21,17 @@ def joinRoom(data):
     join_room(room)
     emit('privateMessage', "Private room entered", room=room)
 
+@socketio.on('leave')
+def leaveRoom(data):
+    room = data['room']
+    leave_room(room)
+
 @socketio.on('privateMessage')
 def handlePrivateMessage(msg, data):
     room = data['room']
     print(data, flush=True) 
     emit('privateMessage', msg, room=room)
+
 
 # database info
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)

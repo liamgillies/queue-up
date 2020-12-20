@@ -37,7 +37,7 @@ export class CreateProfileComponent implements OnInit {
     {name: 'Iron I', rank: 3},
     {name: 'Iron II', rank: 2},
     {name: 'Iron III', rank: 1},
-    {name: 'Iron IV', rank: 0}]
+    {name: 'Iron IV', rank: 0}];
 
   LOL_ROLES = [
     { name: 'Top', value: 'top' },
@@ -45,7 +45,7 @@ export class CreateProfileComponent implements OnInit {
     { name: 'Middle', value: 'middle' },
     { name: 'Bottom', value: 'bottom' },
     { name: 'Support', value: 'support' },
-]
+];
 
   profileForm = new FormGroup({
     ign: new FormControl('', [Validators.required]),
@@ -61,7 +61,7 @@ export class CreateProfileComponent implements OnInit {
   public submitted:boolean = false;
   public rankDifferenceError:boolean = false;
   constructor(private userService: UserService,
-    private router: Router) {}
+              private router: Router) {}
 
   ngOnInit(): void {
   }
@@ -86,13 +86,13 @@ export class CreateProfileComponent implements OnInit {
 
   onCheckboxChange(e) {
     const checkArray: FormArray = this.profileForm.get('roles') as FormArray;
-  
+
     if (e.target.checked) {
       checkArray.push(new FormControl(e.target.value));
     } else {
-      let i: number = 0;
+      let i = 0;
       checkArray.controls.forEach((item: FormControl) => {
-        if (item.value == e.target.value) {
+        if (item.value === e.target.value) {
           checkArray.removeAt(i);
           return;
         }
@@ -103,13 +103,13 @@ export class CreateProfileComponent implements OnInit {
 
   onCheckboxChangeLF(e) {
     const checkArray: FormArray = this.profileForm.get('rolesLF') as FormArray;
-  
+
     if (e.target.checked) {
       checkArray.push(new FormControl(e.target.value));
     } else {
       let i: number = 0;
       checkArray.controls.forEach((item: FormControl) => {
-        if (item.value == e.target.value) {
+        if (item.value === e.target.value) {
           checkArray.removeAt(i);
           return;
         }
@@ -119,6 +119,9 @@ export class CreateProfileComponent implements OnInit {
   }
 
   register() {
+    fetch('http://localhost:5000/getUser')
+    .then(res => res.text())
+    .then(res1 => console.log(res1))
     const rlen = this.profileForm.controls.rank.value.length
     const hlen = this.profileForm.controls.highRankLF.value.length
     const llen = this.profileForm.controls.lowRankLF.value.length
@@ -127,19 +130,19 @@ export class CreateProfileComponent implements OnInit {
     const lowRank = parseInt(this.profileForm.controls.lowRankLF.value.substring(llen-2,llen))
     this.submitted = true;
     if (this.profileForm.invalid) {
-      if(highRank < lowRank) {
+      if (highRank < lowRank) {
         this.rankDifferenceError = true;
       }
       return;
     }
-    else if(highRank < lowRank) {
+    else if (highRank < lowRank) {
       this.rankDifferenceError = true;
       return;
     }
 
     this.userService.createProfile({
       ign: this.profileForm.controls.ign.value,
-      rank: rank,
+      rank,
       roles: this.profileForm.controls.roles.value,
       description: this.profileForm.controls.description.value,
       opgg: this.profileForm.controls.opgg.value,
@@ -149,6 +152,6 @@ export class CreateProfileComponent implements OnInit {
     }).subscribe(() => {
       //this.router.navigate(['/queue']);
     });
-    
+
   }
 }

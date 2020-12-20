@@ -1,12 +1,14 @@
 from datetime import datetime
 import requests, json
-from flask import request, redirect, url_for, jsonify
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import request, redirect, url_for, jsonify, render_template, session, make_response
+from flask_login import login_user, current_user, logout_user, login_required, login_manager
 from queueup import app, db, oauth, get_google_provider_cfg
 from queueup.models import User
+from queueup.forms import ProfileForm, LOL_RANKS, LOL_ROLES
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    print(current_user, flush=True)
     if current_user.is_authenticated:
         return (
             "<p>Hello, {}! You're logged in! Email: {}</p>"
@@ -17,11 +19,12 @@ def index():
             )
         )
     else:
-        return '<a class="button" href="/login">Google Login</a>'
+        return render_template('landing.html')
 
 
 @app.route("/login")
 def login():
+
     # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
@@ -80,19 +83,27 @@ def authorized():
 
 
     # Create a user in db with the information provided by Google
-    user = User(id=id, name=name, email=email, picture=picture)
+    #user = User(id=id, name=name, email=email, picture=picture)
+    user = User.query.get(id)
 
     # Doesn't exist? Add it to the database.
-    #if not User.query.filter_by(id=id).first():
-    if not User.query.get(id):
+    if not user:
+        user = User(id=id, name=name, email=email, picture=picture)
         db.session.add(user)
         db.session.commit()
 
     # Begin user session by logging the user in
     login_user(user)
 
+    session['user'] = user.id
+
+    # if profile not created
+    if not user.profileCreated:
+        return redirect("http://localhost:4200/create")
+
     # Send user back to homepage
-    return redirect(url_for("index"))
+    return redirect("http://localhost:4200/create")
+
 
 @app.route("/logout")
 @login_required
@@ -101,36 +112,36 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/create_profile", methods=['POST'])
+
+@app.route("/create", methods=['GET', 'POST'])
 def create_profile():
     data = request.get_json()
     app.logger.info(current_user)
     return jsonify(data)
 
+    if form.validate_on_submit():
+        print(current_user)
+        #commit changes to db
+        return redirect(url_for('queue'))
 
-@app.route("/users/getmatches", methods=['GET'])
-def get_matches():
+    return render_template("create-profile.html", form=form, roles=LOL_ROLES, ranks=LOL_RANKS)
+
+
+
+@app.route("/queue", methods=['GET', 'POST'])
+def queue():
     users = User.query.all()
-    users = [user.serialize() for user in users]
-
-    for user in users:
-        print(user)
-        # logic for getting matches
-
-    return jsonify(users)
-
-#used for profiles on find_duos and used on profile page for current user info
-@app.route("/user/<int:user_id>", methods=['GET'])
-def get_user():
-    return
+    return render_template("queue.html", users=users)
 
 
-# #get everyone on the list
-# @app.route("/find_duos", methods=['GET'])
-# def get_duos():
-#     return
-#
-# # when you change profile
-# @app.route("/profile", methods=['POST'])
-# def edit_profile():
-#     return
+
+@app.route("/matches", methods=['GET', 'POST'])
+def matches():
+    users = User.query.all()
+    return render_template("queue.html", users=users)
+
+
+@app.route('/getUser', methods=['GET', 'POST'])
+def getUser():
+    #return  "<p>Hello, {}! You're logged in! Email: {}</p>"
+    return jsonify({'id': session['user']})

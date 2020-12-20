@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link href="{{ url_for('static', filename='css/landing.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<div class="bg-image">
+  <div class="text-ctr">
+    <div class="text">
+      Welcome to Queue Up! <br />
+      Please log in to continue
+      <br />
+      <br />
+      <div class="col s12 m6 offset-m3 center-align">
+        <a class="oauth-container btn darken-4 white black-text" href="/login" style="text-transform: none">
+          <div class="left">
+            <img
+              width="20px"
+              style="margin-right: 8px"
+              alt="Google sign-in"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+            />
+          </div>
+          Login with Google
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

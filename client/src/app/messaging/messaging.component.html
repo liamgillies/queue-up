@@ -3,7 +3,7 @@
         <span class="column1">
             <div id="header">Matches</div>
             <div *ngFor="let match of matches">
-                <div class="match-ctr" (click)="joinRoom(match._id)">
+                <div class="match-ctr" (click)="joinRoom(match.id)">
                     {{match.ign}}
                 </div>
             </div>

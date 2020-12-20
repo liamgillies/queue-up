@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link href="{{ url_for('static', filename='css/create-profile.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="bg-image">
+  <div class="center-ctr">
+
+    {% for user in users %}
+      <p> queue works! </p>
+      <p> user </p>
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock %}
