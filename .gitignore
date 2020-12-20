@@ -14,6 +14,9 @@ bazel-out
 
 # dependencies
 **/node_modules
+**/site-packages
+**/__pycache__
+
 
 # build file
 **/dist

@@ -50,7 +50,7 @@ class Roles(db.Model):
 class Messages(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     message = db.Column(db.String(1000), nullable=False)
-    created_date = db.Column(datetime, default=datetime.datetime.utcnow)
+    created_date = db.Column(db.String(1000))
 
     def __repr__(self):
         return f"Message('{self.message}', '{self.created_date}'"
