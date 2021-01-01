@@ -1,3 +1,4 @@
-queue up! is the most e p i c place to find a league duo partner
+# Queue Up
+Queue up is a way to new find friends to play video games with.
 
-Sadly we have failed but it was a good learning experience
+This project was done for HackUMASS VIII
